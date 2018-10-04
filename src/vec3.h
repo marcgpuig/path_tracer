@@ -17,6 +17,9 @@ public:
 
   ~vec3() = default;
 
+  static vec3 zeros() { return vec3(0.0, 0.0, 0.0); }
+  static vec3 ones()  { return vec3(1.0, 1.0, 1.0); }
+
   inline value_type x() const { return c[0]; }
   inline value_type y() const { return c[1]; }
   inline value_type z() const { return c[2]; }
@@ -24,12 +27,12 @@ public:
   inline value_type g() const { return c[1]; }
   inline value_type b() const { return c[2]; }
 
-  inline const vec3& operator+() const { return *this; }
-  inline vec3 operator-() const { return vec3(-c[0], -c[1], -c[2]); }
-  inline value_type operator[](int i) const { return c[i]; }
-  inline value_type& operator[](int i) { return c[i]; }
+  inline const vec3 &operator+()       const { return *this; }
+  inline vec3        operator-()       const { return vec3(-c[0], -c[1], -c[2]); }
+  inline value_type  operator[](int i) const { return c[i]; }
+  inline value_type &operator[](int i)       { return c[i]; }
 
-  inline vec3& operator+=(const vec3 &o)
+  inline vec3 &operator+=(const vec3 &o)
   {
     c[0] += o.c[0];
     c[1] += o.c[1];
@@ -37,7 +40,7 @@ public:
     return *this;
   }
 
-  inline vec3& operator-=(const vec3 &o)
+  inline vec3 &operator-=(const vec3 &o)
   {
     c[0] -= o.c[0];
     c[1] -= o.c[1];
@@ -45,7 +48,7 @@ public:
     return *this;
   }
 
-  inline vec3& operator*=(const vec3 &o)
+  inline vec3 &operator*=(const vec3 &o)
   {
     c[0] *= o.c[0];
     c[1] *= o.c[1];
@@ -53,7 +56,7 @@ public:
     return *this;
   }
 
-  inline vec3& operator/=(const vec3 &o)
+  inline vec3 &operator/=(const vec3 &o)
   {
     c[0] /= o.c[0];
     c[1] /= o.c[1];
@@ -61,7 +64,7 @@ public:
     return *this;
   }
 
-  inline vec3& operator*=(const value_type v)
+  inline vec3 &operator*=(const value_type v)
   {
     c[0] *= v;
     c[1] *= v;
@@ -69,7 +72,7 @@ public:
     return *this;
   }
 
-  inline vec3& operator/=(const value_type v)
+  inline vec3 &operator/=(const value_type v)
   {
     value_type inv_v = 1.0 / v;
     c[0] *= inv_v;
@@ -96,7 +99,7 @@ public:
     c[2] *= k;
   }
 
-  value_type c[3];
+  value_type c[3]; // coordinates
 };
 
 inline std::istream& operator>>(std::istream &is, vec3 &t) {
