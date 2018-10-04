@@ -1,6 +1,6 @@
 #include <iostream>
 #include <cstdint>
-#include "vec3.h"
+#include "ray.h"
 
 #define STB_IMAGE_WRITE_IMPLEMENTATION
 #include <stb_image_write.h>
@@ -23,32 +23,16 @@ int main(int argc, char const *argv[])
   {
     for (int x = 0; x < WIDTH; ++x)
     {
-      float r = float(x) / float(WIDTH);
-      float g = float(y) / float(HEIGHT);
-      float b = 0.0f;
+      vec3 col(float(x) / float(WIDTH), float(y) / float(HEIGHT), 0.0);
 
-      buffer[image_pixel(x, y) + 0] = int(255.99 * r);
-      buffer[image_pixel(x, y) + 1] = int(255.99 * g);
-      buffer[image_pixel(x, y) + 2] = int(255.99 * b);
+      buffer[image_pixel(x, y) + 0] = int(255.99 * col.r());
+      buffer[image_pixel(x, y) + 1] = int(255.99 * col.g());
+      buffer[image_pixel(x, y) + 2] = int(255.99 * col.b());
     }
   }
 
   std::cout << "Saving image..." << std::endl;
   stbi_write_png("out.png", WIDTH, HEIGHT, CHANNELS, buffer, 0);
-
-  vec3 a;
-  std::cout << a << std::endl;
-
-  vec3 b = {1,1,1};
-  std::cout << b << std::endl;
-
-  vec3 c{1,1,1};
-  std::cout << c << std::endl;
-
-  vec3 d(1,1,1);
-  std::cout << d << std::endl;
-
-  std::cout << b + b << std::endl;
 
   return 0;
 }
