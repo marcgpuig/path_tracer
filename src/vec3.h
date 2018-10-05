@@ -83,12 +83,12 @@ public:
 
   inline value_type lenght() const
   {
-    return sqrt(c[0] * c[0] + c[1] * c[1] + c[0] * c[0]);
+    return sqrt(c[0] * c[0] + c[1] * c[1] + c[2] * c[2]);
   }
 
   inline value_type squared_lenght() const
   {
-    return c[0] * c[0] + c[1] * c[1] + c[0] * c[0];
+    return c[0] * c[0] + c[1] * c[1] + c[2] * c[2];
   }
 
   inline void make_unit_vector()
