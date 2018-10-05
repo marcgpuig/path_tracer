@@ -1,7 +1,7 @@
 # https://jacquesh.github.io/post/basic-cmake/
 # Project definition
 cmake_minimum_required(VERSION 3.8.0)
-project(ray_trace)
+project(path_tracer)
 
 # Source directorioes and files
 set(SRC_DIR ${CMAKE_SOURCE_DIR}/src)
@@ -24,7 +24,7 @@ add_executable(${PROJECT_NAME}
     ${SOURCES}
 )
 
-# Include directories 
+# Include directories
 include_directories(${PROJECT_NAME}
     ${STB_INCLUDE}
 )

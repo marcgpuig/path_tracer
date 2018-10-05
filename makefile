@@ -3,7 +3,7 @@ BIN_FOLDER=$(CURDIR)/bin
 INSTALL_FOLDER=$(CURDIR)/install
 LIB_FOLDER=$(CURDIR)/lib
 CMAKE_FOLDER=$(CURDIR)
-PROGRAM_NAME=ray_trace.exe
+PROGRAM_NAME=path_tracer.exe
 
 BUILD_TYPE=Visual Studio 15 2017 Win64
 
