@@ -12,19 +12,14 @@
       ]
     },
     {
-      "label": "Run",
+      "label": "Build & Run",
       "type": "shell",
       "command": "make",
       "args": [
         "run"
-      ]
-    },
-    {
-      "label": "Build & Run",
-      "type": "shell",
+      ],
       "dependsOn": [
-        "Build",
-        "Run"
+        "Build"
       ],
       "group": {
         "kind": "build",
