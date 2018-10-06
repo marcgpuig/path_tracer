@@ -1,0 +1,13 @@
+{
+    "editor.insertSpaces": true,
+    "editor.tabSize": 2,
+    "editor.trimAutoWhitespace": true,
+    "editor.autoIndent": true,
+    "files.exclude": {
+        "**/.git": true,
+        "bin": true,
+        "build": true,
+        "LICENSE": true,
+        "*.sublime-project": true
+    }
+}
