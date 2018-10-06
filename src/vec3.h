@@ -17,22 +17,22 @@ public:
 
   ~vec3() = default;
 
-  static vec3 zeros() { return vec3(0.0, 0.0, 0.0); }
+  static vec3 zeros() { return vec3(); }
   static vec3 ones()  { return vec3(1.0, 1.0, 1.0); }
 
-  inline value_type x() const { return c[0]; }
-  inline value_type y() const { return c[1]; }
-  inline value_type z() const { return c[2]; }
-  inline value_type r() const { return c[0]; }
-  inline value_type g() const { return c[1]; }
-  inline value_type b() const { return c[2]; }
+  value_type x() const { return c[0]; }
+  value_type y() const { return c[1]; }
+  value_type z() const { return c[2]; }
+  value_type r() const { return c[0]; }
+  value_type g() const { return c[1]; }
+  value_type b() const { return c[2]; }
 
-  inline const vec3 &operator+()       const { return *this; }
-  inline vec3        operator-()       const { return vec3(-c[0], -c[1], -c[2]); }
-  inline value_type  operator[](int i) const { return c[i]; }
-  inline value_type &operator[](int i)       { return c[i]; }
+  const vec3 &operator+()       const { return *this; }
+  vec3        operator-()       const { return vec3(-c[0], -c[1], -c[2]); }
+  value_type  operator[](int i) const { return c[i]; }
+  value_type &operator[](int i)       { return c[i]; }
 
-  inline vec3 &operator+=(const vec3 &o)
+  vec3 &operator+=(const vec3 &o)
   {
     c[0] += o.c[0];
     c[1] += o.c[1];
@@ -40,7 +40,7 @@ public:
     return *this;
   }
 
-  inline vec3 &operator-=(const vec3 &o)
+  vec3 &operator-=(const vec3 &o)
   {
     c[0] -= o.c[0];
     c[1] -= o.c[1];
@@ -48,7 +48,7 @@ public:
     return *this;
   }
 
-  inline vec3 &operator*=(const vec3 &o)
+  vec3 &operator*=(const vec3 &o)
   {
     c[0] *= o.c[0];
     c[1] *= o.c[1];
@@ -56,7 +56,7 @@ public:
     return *this;
   }
 
-  inline vec3 &operator/=(const vec3 &o)
+  vec3 &operator/=(const vec3 &o)
   {
     c[0] /= o.c[0];
     c[1] /= o.c[1];
@@ -64,7 +64,7 @@ public:
     return *this;
   }
 
-  inline vec3 &operator*=(const value_type v)
+  vec3 &operator*=(const value_type v)
   {
     c[0] *= v;
     c[1] *= v;
@@ -72,7 +72,7 @@ public:
     return *this;
   }
 
-  inline vec3 &operator/=(const value_type v)
+  vec3 &operator/=(const value_type v)
   {
     value_type inv_v = 1.0 / v;
     c[0] *= inv_v;
@@ -81,17 +81,17 @@ public:
     return *this;
   }
 
-  inline value_type lenght() const
+  value_type lenght() const
   {
     return sqrt(c[0] * c[0] + c[1] * c[1] + c[2] * c[2]);
   }
 
-  inline value_type squared_lenght() const
+  value_type squared_lenght() const
   {
     return c[0] * c[0] + c[1] * c[1] + c[2] * c[2];
   }
 
-  inline void make_unit_vector()
+  void make_unit_vector()
   {
     value_type k = 1.0 / lenght();
     c[0] *= k;
