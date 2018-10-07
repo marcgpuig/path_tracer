@@ -165,4 +165,4 @@ inline vec3 cross(const vec3 &v0, const vec3 &v1)
       v0.c[0] * v1.c[1] - v0.c[1] * v1.c[0]);
 }
 
-#endif // VEC3_H
+#endif // !VEC3_H

@@ -20,4 +20,4 @@ public:
   vec3 B;
 };
 
-#endif // RAY_H
+#endif // !RAY_H
