@@ -3,6 +3,8 @@
 
 #include "ray.h"
 
+class material;
+
 struct hit_record
 {
   // distance
@@ -11,6 +13,7 @@ struct hit_record
   vec3 p;
   // normal
   vec3 normal;
+  material *mat = nullptr;
 };
 
 class hitable
@@ -19,4 +22,4 @@ public:
   virtual bool hit(const ray &r, float t_min, float t_max, hit_record &rec) const = 0;
 };
 
-#endif // HITABLE_H
+#endif // !HITABLE_H
