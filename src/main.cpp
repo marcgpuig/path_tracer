@@ -17,7 +17,8 @@ const int32_t WIDTH = 400;
 const int32_t HEIGHT = 200;
 const uint8_t CHANNELS = 3;
 const int64_t TOTAL_BYTES = WIDTH * HEIGHT * CHANNELS;
-const uint16_t SAMPLES = 100;
+const uint16_t SAMPLES = 20;
+const uint16_t BOUNCES = 10;
 
 int64_t image_pixel(const int32_t &x, const int32_t &y)
 {
@@ -32,9 +33,9 @@ vec3 color(const ray &r, hitable *world, int depth)
   {
     ray scattered;
     vec3 attenuation;
-    if (depth < 50 && rec.mat->scatter(r, rec, attenuation, scattered))
+    if (depth > 0 && rec.mat->scatter(r, rec, attenuation, scattered))
     {
-      return attenuation * color(scattered, world, depth + 1);
+      return attenuation * color(scattered, world, depth - 1);
     }
     else return vec3::zeros();
   }
@@ -54,13 +55,18 @@ int main(int argc, char const *argv[])
 {
   auto buffer = std::make_unique<uint8_t[]>(TOTAL_BYTES);
 
-  const uint8_t object_num = 3;
+  const uint8_t object_num = 4;
   hitable *list[object_num];
-  list[0] = new sphere(vec3( 0,-100.5,-1), 100, new lambertian(vec3::ones()));
-  list[1] = new sphere(vec3(-.5,0,-1), 0.5, new metal(vec3(0.2,0.26,0.46)));
-  list[2] = new sphere(vec3( .5,0,-1), 0.5, new lambertian(vec3(0.96,0.55,0.37)));
-  hitable *world = new hitable_list(list, object_num);  
-  camera cam;
+  list[0] = new sphere(vec3( 0,-100.5,-1), 100, new lambertian(vec3(0.48, 0.55, 0.19)));
+  list[1] = new sphere(vec3(-1.0,0,-1), 0.5, new dielectric(1.5));
+  list[2] = new sphere(vec3(0,0,-1), 0.5, new lambertian(vec3(0.95, 0.56, 0.22)));
+  list[3] = new sphere(vec3(1.0,0,-1), 0.5, new metal(vec3(0.10, 0.51, 0.56), .2));
+  hitable *world = new hitable_list(list, object_num);
+  vec3 cam_pos(13,2,3);
+  vec3 cam_look(0,0,0);
+  double dist_to_focus = (cam_pos - cam_look).length();
+  double aperture = 0.2;
+  camera cam(cam_pos, cam_look, vec3(0,1,0), 20, float(WIDTH) / float(HEIGHT), aperture, dist_to_focus);
 
   std::cout << std::endl << "Rendering..." << std::endl;
   for (int y = 0; y < HEIGHT; ++y)
@@ -73,7 +79,7 @@ int main(int argc, char const *argv[])
         double u = double(x + dist(mt)) / double(WIDTH);
         double v = double(y + dist(mt)) / double(HEIGHT);
         ray r = cam.get_ray(u, v);
-        col += color(r, world, 0);
+        col += color(r, world, BOUNCES);
       }
       col /= float(SAMPLES);
       col /= vec3(sqrt(col.x()), sqrt(col.y()), sqrt(col.z()));
@@ -96,6 +102,6 @@ int main(int argc, char const *argv[])
 
   stbi_write_png("out.png", WIDTH, HEIGHT, CHANNELS, buffer.get(), 0);
   std::cout << " - Done!" << std::endl;
-  
+
   return 0;
 }

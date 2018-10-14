@@ -81,19 +81,19 @@ public:
     return *this;
   }
 
-  value_type lenght() const
+  value_type length() const
   {
     return sqrt(c[0] * c[0] + c[1] * c[1] + c[2] * c[2]);
   }
 
-  value_type squared_lenght() const
+  value_type squared_length() const
   {
     return c[0] * c[0] + c[1] * c[1] + c[2] * c[2];
   }
 
   void make_unit_vector()
   {
-    value_type k = 1.0 / lenght();
+    value_type k = 1.0 / length();
     c[0] *= k;
     c[1] *= k;
     c[2] *= k;
@@ -149,7 +149,7 @@ inline vec3 operator/(vec3 v0, const vec3::value_type &v)
 
 inline vec3 unit_vector(vec3 v)
 {
-  return v / v.lenght();
+  return v / v.length();
 }
 
 inline vec3::value_type dot(const vec3 &v0, const vec3 &v1)

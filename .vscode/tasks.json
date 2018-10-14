@@ -32,7 +32,8 @@
       "command": "make",
       "args": [
         "clean"
-      ]
+      ],
+      "problemMatcher": []
     }
   ]
 }
