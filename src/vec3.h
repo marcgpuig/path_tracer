@@ -12,6 +12,7 @@ public:
   using value_type = double;
 
   vec3() : c{0.0, 0.0, 0.0} {}
+  vec3(const double &u) : c{u, u, u} {}
   vec3(const value_type &u0, const value_type &u1, const value_type &u2)
   : c{u0, u1, u2} {}
 
