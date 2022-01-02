@@ -1,7 +1,7 @@
 #ifndef MATERIAL_H
 #define MATERIAL_H
 
-struct hit_record;
+struct HitRecord;
 
 #include "ray.h"
 #include "hitable.h"
@@ -9,16 +9,16 @@ struct hit_record;
 
 #include <algorithm>
 
-vec3 random_in_unit_sphere()
+Vec3 random_in_unit_sphere()
 {
-  vec3 p;
+  Vec3 p;
   do {
-    p = 2.0 * vec3(dist(mt), dist(mt), dist(mt)) - vec3::ones();
+    p = 2.0 * Vec3(dist(mt), dist(mt), dist(mt)) - Vec3::ones();
   } while (p.squared_length() >= 1.0);
   return p;
 }
 
-vec3 reflect(const vec3 &v, const vec3 &n)
+Vec3 reflect(const Vec3 &v, const Vec3 &n)
 {
   return v - 2 * dot(v, n) * n;
 }
@@ -30,9 +30,9 @@ double schlick(double cosine, double ref_index)
   return r0 + (1-r0) * pow((1 - cosine), 5);
 }
 
-bool refract(const vec3 &v, const vec3 &n, double ni_over_nt, vec3 &refracted)
+bool refract(const Vec3 &v, const Vec3 &n, double ni_over_nt, Vec3 &refracted)
 {
-  vec3 uv = unit_vector(v);
+  Vec3 uv = unit_vector(v);
   double dt = dot(uv, n);
   double discriminant = 1.0 - ni_over_nt * ni_over_nt * (1 - dt * dt);
   if (discriminant > 0)
@@ -48,58 +48,58 @@ bool refract(const vec3 &v, const vec3 &n, double ni_over_nt, vec3 &refracted)
 
 double clamp01(double f) { return (f > 1) ? 1 : (f < 0) ? 0 : f; }
 
-class material
+class Material
 {
 public:
-  virtual bool scatter(const ray &ra_in, const hit_record &rec,
-    vec3 &attenuation, ray &scattered) const = 0;
+  virtual bool scatter(const Ray &ra_in, const HitRecord &rec,
+    Vec3 &attenuation, Ray &scattered) const = 0;
 };
 
-class lambertian : public material
+class Lambertian : public Material
 {
 public:
-  lambertian(const vec3 &alb) : albedo(alb) {}
-  bool scatter(const ray &r_in, const hit_record &rec,
-    vec3 &attenuation, ray &scattered) const override
+  Lambertian(const Vec3 &alb) : albedo(alb) {}
+  bool scatter(const Ray &r_in, const HitRecord &rec,
+    Vec3 &attenuation, Ray &scattered) const override
   {
-    vec3 target = rec.p + rec.normal + random_in_unit_sphere();
-    scattered = ray(rec.p, target - rec.p);
+    Vec3 target = rec.p + rec.normal + random_in_unit_sphere();
+    scattered = Ray(rec.p, target - rec.p);
     attenuation = albedo;
     return true;
   }
 
-  vec3 albedo;
+  Vec3 albedo;
 };
 
-class metal : public material
+class Metal : public Material
 {
 public:
-  metal(const vec3 &alb, double f) : albedo(alb), fuzz(clamp01(f)) {}
-  bool scatter(const ray &r_in, const hit_record &rec,
-    vec3 &attenuation, ray &scattered) const override
+  Metal(const Vec3 &alb, double f) : albedo(alb), fuzz(clamp01(f)) {}
+  bool scatter(const Ray &r_in, const HitRecord &rec,
+    Vec3 &attenuation, Ray &scattered) const override
   {
-    vec3 reflected = reflect(unit_vector(r_in.direction()), rec.normal);
-    scattered = ray(rec.p, reflected + fuzz * random_in_unit_sphere());
+    Vec3 reflected = reflect(unit_vector(r_in.direction()), rec.normal);
+    scattered = Ray(rec.p, reflected + fuzz * random_in_unit_sphere());
     attenuation = albedo;
     return (dot(scattered.direction(), rec.normal) > 0);
   }
 
-  vec3 albedo;
+  Vec3 albedo;
   double fuzz;
 };
 
-class dielectric : public material
+class Dielectric : public Material
 {
 public:
-  dielectric (float ri) : ref_index(ri) {}
-  bool scatter(const ray& r_in, const hit_record &rec,
-    vec3 &attenuation, ray &scattered) const override
+  Dielectric (float ri) : ref_index(ri) {}
+  bool scatter(const Ray& r_in, const HitRecord &rec,
+    Vec3 &attenuation, Ray &scattered) const override
   {
-    vec3 outward_normal;
-    vec3 reflected = reflect(r_in.direction(), rec.normal);
+    Vec3 outward_normal;
+    Vec3 reflected = reflect(r_in.direction(), rec.normal);
     float ni_over_nt;
-    attenuation = vec3(1.0, 1.0, 1.0);
-    vec3 refracted;
+    attenuation = Vec3(1.0, 1.0, 1.0);
+    Vec3 refracted;
     double reflect_prob;
     double cosine;
     if(dot(r_in.direction(), rec.normal) > 0)
@@ -120,16 +120,16 @@ public:
     }
     else
     {
-      scattered = ray(rec.p, reflected);
+      scattered = Ray(rec.p, reflected);
       reflect_prob = 1.0;
     }
     if (dist(mt) < reflect_prob)
     {
-      scattered = ray(rec.p, reflected);
+      scattered = Ray(rec.p, reflected);
     }
     else
     {
-      scattered = ray(rec.p, refracted);
+      scattered = Ray(rec.p, refracted);
     }
     return true;
   }

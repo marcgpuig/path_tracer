@@ -7,19 +7,19 @@
 #define PI 3.14159265359
 #define HALF_PI 1.57079632679
 
-vec3 random_in_unit_disk()
+Vec3 random_in_unit_disk()
 {
-  vec3 p;
+  Vec3 p;
   do {
-    p = 2.0 * vec3(dist(mt), dist(mt), 0) - vec3(1,1,0);
+    p = 2.0 * Vec3(dist(mt), dist(mt), 0) - Vec3(1,1,0);
   } while (dot(p,p) >= 1.0);
   return p;
 }
 
-class camera
+class Camera
 {
 public:
-  camera(vec3 pos, vec3 lookat, vec3 up, double vfov, double aspect, double aperture, double focus_dist)
+  Camera(Vec3 pos, Vec3 lookat, Vec3 up, double vfov, double aspect, double aperture, double focus_dist)
     : lens_radius(aperture / 2)
   {
     double theta = vfov * PI / 180;
@@ -34,18 +34,18 @@ public:
     vertical = 2 * half_height * focus_dist * v;
   }
 
-  ray get_ray(double s, double t)
+  Ray get_ray(double s, double t)
   {
-    vec3 rd = lens_radius * random_in_unit_disk();
-    vec3 offset = u * rd.x() + v * rd.y();
-    return ray(origin + offset, lower_left_corner + s * horizontal + t * vertical - origin - offset);
+    Vec3 rd = lens_radius * random_in_unit_disk();
+    Vec3 offset = u * rd.x() + v * rd.y();
+    return Ray(origin + offset, lower_left_corner + s * horizontal + t * vertical - origin - offset);
   }
 
-  vec3 origin;
-  vec3 lower_left_corner;
-  vec3 horizontal;
-  vec3 vertical;
-  vec3 u, v, w;
+  Vec3 origin;
+  Vec3 lower_left_corner;
+  Vec3 horizontal;
+  Vec3 vertical;
+  Vec3 u, v, w;
   float lens_radius;
 };
 

@@ -3,37 +3,45 @@
 
 #include "hitable.h"
 
-class sphere : public hitable
+#include <memory>
+
+class Sphere : public Hitable
 {
 public:
-  sphere() : center(), radius(0) {}
-  sphere(vec3 pos, double r, material *m) : center(pos), radius(r), mat(m) {}
-  bool hit(const ray &r, double t_min, double t_max, hit_record &rec) const override;
+  Sphere() : center(), radius(0) {}
+  Sphere(Vec3 pos, double r, std::shared_ptr<Material> m) : center(pos), radius(r), mat(std::move(m)) {}
+  bool hit(const Ray &r, double t_min, double t_max, HitRecord &rec) const override;
 
-  vec3 center;
+  Vec3 center;
   double radius;
-  material *mat;
+  std::shared_ptr<Material> mat;
 };
 
-bool sphere::hit(const ray &r, double t_min, double t_max, hit_record &rec) const
+bool Sphere::hit(const Ray &r, double t_min, double t_max, HitRecord &rec) const
 {
-  // sphere on p(x, y, z):
-  // x*x + y*y + z*z = r*r
-  // sphere on center C(cx, cy, cz) on p(x, y, z):
-  // (x-cx)*(x-cx) + (y-cy)*(y-cy) + (z-cz)*(z-cz) = r*r
+  // Formula for sphere on point p(x, y, z):
+  //   x*x + y*y + z*z = r*r
+  //
+  // sphere with center C(cx, cy, cz) on point p(x, y, z):
+  //   (x-cx)*(x-cx) + (y-cy)*(y-cy) + (z-cz)*(z-cz) = r*r
+  //
   // so:
-  // (p-C) * (p-C) = r*r
-  // using vec3 we can solve it like this:
-  // dot(p-C, p-C) = r*r
+  //   (p-C) * (p-C) = r*r
+  //
+  // using a vector we can solve it like this:
+  //   dot(p-C, p-C) = r*r
+  //
   // see if a ray (p(t) = A + t*B) collides with sphere:
-  // dot(p(t)-C, p(t)-C) = r*r
-  // dot((A + t*B)-C, (A + t*B)-C) = r*r
-  // ((A + t*B)-C)*((A + t*B)-C) = r*r
+  //   dot(p(t)-C, p(t)-C) = r*r
+  //   dot((A + t*B)-C, (A + t*B)-C) = r*r
+  //   ((A + t*B)-C)*((A + t*B)-C) = r*r
+  //
   // discriminant on ax^2+bx+c=0 is b^2-4ac
-  // if discrim is 0 has one lolution,
-  // if < 0 has no solition and if > 0 has 2 solutions
+  // if the discriminant == 0, it has one solution,
+  // otherwhise if it is < 0 it has no solition
+  // and if it is > 0, it has 2 solutions.
 
-  vec3 oc = r.origin() - center;
+  Vec3 oc = r.origin() - center;
   double a = dot(r.direction(), r.direction());
   double b = dot(oc, r.direction());
   double c = dot(oc, oc) - radius * radius;

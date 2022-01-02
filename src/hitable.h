@@ -3,23 +3,25 @@
 
 #include "ray.h"
 
-class material;
+#include <memory>
 
-struct hit_record
+class Material;
+
+struct HitRecord
 {
   // distance
   double t;
   // position
-  vec3 p;
+  Vec3 p;
   // normal
-  vec3 normal;
-  material *mat = nullptr;
+  Vec3 normal;
+  std::shared_ptr<Material> mat = nullptr;
 };
 
-class hitable
+class Hitable
 {
 public:
-  virtual bool hit(const ray &r, double t_min, double t_max, hit_record &rec) const = 0;
+  virtual bool hit(const Ray &r, double t_min, double t_max, HitRecord &rec) const = 0;
 };
 
 #endif // !HITABLE_H

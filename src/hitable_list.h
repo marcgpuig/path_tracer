@@ -1,27 +1,29 @@
 #ifndef HITABLE_LIST_H
 #define HITABLE_LIST_H
 
+#include <memory>
+#include <vector>
+
 #include "hitable.h"
 
-class hitable_list : public hitable
+class HitableList : public Hitable
 {
-public:
-  hitable_list() {};
-  hitable_list(hitable **l, int n) : list(l), list_size(n) {};
-  bool hit (const ray &r, double t_min, double t_max, hit_record &rec) const override;
+ public:
+  HitableList() {};
+  bool hit (const Ray &r, double t_min, double t_max, HitRecord &rec) const override;
+  void add(std::unique_ptr<Hitable> object);
 
-  hitable **list;
-  int list_size;
+  std::vector<std::unique_ptr<Hitable>> list;
 };
 
-bool hitable_list::hit (const ray &r, double t_min, double t_max, hit_record &rec) const
+bool HitableList::hit(const Ray &r, double t_min, double t_max, HitRecord &rec) const
 {
-  hit_record temp_rec;
+  HitRecord temp_rec;
   bool hit_anything = false;
   double closest_so_far = t_max;
-  for (size_t i = 0; i < list_size; i++)
+  for (auto && object : list)
   {
-    if (list[i]->hit(r, t_min, closest_so_far, temp_rec))
+    if (object->hit(r, t_min, closest_so_far, temp_rec))
     {
       hit_anything = true;
       closest_so_far = temp_rec.t;
@@ -29,6 +31,10 @@ bool hitable_list::hit (const ray &r, double t_min, double t_max, hit_record &re
     }
   }
   return hit_anything;
+}
+
+void HitableList::add(std::unique_ptr<Hitable> object) {
+  list.push_back(std::move(object));
 }
 
 #endif // !HITABLE_LIST_H
