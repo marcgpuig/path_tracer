@@ -1,5 +1,12 @@
+# Bazel
+/bazel-*
+/tools/integration/bazel-*
+
+# Build
 bin
 build
 
-*.png
 *.sublime-project
+
+# Out
+*.png
